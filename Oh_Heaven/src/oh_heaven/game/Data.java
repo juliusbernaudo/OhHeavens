@@ -2,24 +2,26 @@ package oh_heaven.game;
 
 import ch.aplu.jcardgame.CardGame;
 import ch.aplu.jcardgame.Hand;
+import ch.aplu.jgamegrid.Actor;
 
 public class Data extends CardGame {
-    private Hand[] hands;
+    private Hand hand;
     private int score;
     private int trick;
     private int bid;
+    private Actor scoreActor;
     private boolean enforceRules = false;
 
     public Data(Hand[] hands){
-        this.hands = hands;
+        this.hand = hand;
     }
 
-    public Hand[] getHands() {
-        return hands;
+    public Hand getHand() {
+        return hand;
     }
 
-    public void setHands(Hand[] hands) {
-        this.hands = hands;
+    public void setHand(Hand[] hands) {
+        this.hand = hand;
     }
 
     public int getScore() {

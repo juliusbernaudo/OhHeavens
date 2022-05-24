@@ -26,8 +26,8 @@ public class Oh_Heaven extends CardGame {
   
   final String trumpImage[] = {"bigspade.gif","bigheart.gif","bigdiamond.gif","bigclub.gif"};
 
-  static public final int seed = 30006;
-  static final Random random = new Random(seed);
+  static public int seed = 30006;
+  static Random random;
   
   // return random Enum value
   public static <T extends Enum<?>> T randomEnum(Class<T> clazz){
@@ -47,7 +47,7 @@ public class Oh_Heaven extends CardGame {
       return list.get(x);
   }
   
-  private void dealingOut(Hand[] hands, int nbPlayers, int nbCardsPerPlayer) {
+  private void dealingOut(Hand[] hands, int nbPlayers, int nbCardsPerPlayer) { // IPlayerAdapter[] players
 	  Hand pack = deck.toHand(false);
 	  // pack.setView(Oh_Heaven.this, new RowLayout(hideLocation, 0));
 	  for (int i = 0; i < nbCardsPerPlayer; i++) {
@@ -56,7 +56,8 @@ public class Oh_Heaven extends CardGame {
 			  Card dealt = randomCard(pack);
 		      // System.out.println("Cards = " + dealt);
 		      dealt.removeFromHand(false);
-		      hands[j].insert(dealt, false);
+			  hands[j].insert(dealt, false);
+		      // players[j].getHand().insert(dealt, false);
 			  // dealt.transfer(hands[j], true);
 		  }
 	  }
@@ -68,8 +69,8 @@ public class Oh_Heaven extends CardGame {
 	 
   private final String version = "1.0";
   public final int nbPlayers = 4;
-  public final int nbStartCards = 13;
-  public final int nbRounds = 3;
+  public static int nbStartCards = 13;
+  public static int nbRounds = 3;
   public final int madeBidBonus = 10;
   private final int handWidth = 400;
   private final int trickWidth = 40;
@@ -94,7 +95,7 @@ public class Oh_Heaven extends CardGame {
   private Hand[] hands;
   private Location hideLocation = new Location(-500, - 500);
   private Location trumpsActorLocation = new Location(50, 50);
-  private boolean enforceRules=false;
+  private static boolean enforceRules=false;
 
   public void setStatus(String string) { setStatusText(string); }
   
@@ -320,14 +321,22 @@ private void playRound() {
 
   public static void main(String[] args)
   {
-	// System.out.println("Working Directory = " + System.getProperty("user.dir"));
-	final Properties properties;
-	if (args == null || args.length == 0) {
-	//  properties = PropertiesLoader.loadPropertiesFile(null);
-	} else {
-	//      properties = PropertiesLoader.loadPropertiesFile(args[0]);
-	}
-    new Oh_Heaven();
+	  // System.out.println("Working Directory = " + System.getProperty("user.dir"));
+	  final Properties properties;
+	  if (args == null || args.length == 0) {
+		  properties = PropertiesLoader.loadPropertiesFile(null);
+	  } else {
+		  properties = PropertiesLoader.loadPropertiesFile(args[0]);
+	  }
+	  seed = PropertiesLoader.loadSeed(properties);
+	  nbStartCards = PropertiesLoader.loadNbStartCards(properties);
+	  nbRounds = PropertiesLoader.loadRounds(properties);
+	  enforceRules = PropertiesLoader.loadEnforceRules(properties);
+	  ArrayList<String> players = PropertiesLoader.loadPlayers(properties);
+
+	  random = new Random(seed);
+
+	  new Oh_Heaven();
   }
 
 }
