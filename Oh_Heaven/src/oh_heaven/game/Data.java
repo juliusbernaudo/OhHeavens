@@ -7,12 +7,11 @@ import ch.aplu.jgamegrid.Actor;
 
 public class Data extends CardGame {
     private Hand hand;
-    private int score;
-    private int trick;
+    private int score = 0;
+    private int trick = 0;
     private int bid;
-    private Actor scoreActor;
+    private Actor scoreActor = new Actor();
     private RowLayout layout;
-    private boolean enforceRules = false;
 
     public Data() {
     }
@@ -33,12 +32,23 @@ public class Data extends CardGame {
         this.score = score;
     }
 
+    public void addScore(int score) {this.score += score;}
+
+    public void updateScores(int madeBidBonus) {
+        addScore(trick);
+        if (trick == bid) addScore(madeBidBonus);
+    }
+
     public int getTrick() {
         return trick;
     }
 
     public void setTrick(int trick) {
         this.trick = trick;
+    }
+
+    public void addTrick(int trick) {
+        this.trick += trick;
     }
 
     public int getBid() {
@@ -48,6 +58,8 @@ public class Data extends CardGame {
     public void setBid(int bid) {
         this.bid = bid;
     }
+
+    public void addBid(int bid) {this.bid += bid;}
 
     public Actor getScoreActor() {
         return scoreActor;
@@ -63,13 +75,5 @@ public class Data extends CardGame {
 
     public void setLayout(RowLayout layout) {
         this.layout = layout;
-    }
-
-    public boolean isEnforceRules() {
-        return enforceRules;
-    }
-
-    public void setEnforceRules(boolean enforceRules) {
-        this.enforceRules = enforceRules;
     }
 }

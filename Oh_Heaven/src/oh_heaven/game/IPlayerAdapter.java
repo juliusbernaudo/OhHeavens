@@ -1,7 +1,9 @@
 package oh_heaven.game;
 
+import ch.aplu.jcardgame.Card;
+
 public interface IPlayerAdapter {
 
-    public void move();
+    public Card move();
     public Data info();
 }

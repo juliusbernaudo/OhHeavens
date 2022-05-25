@@ -1,12 +1,19 @@
 package oh_heaven.game;
 
+import ch.aplu.jcardgame.Card;
+import ch.aplu.jcardgame.Hand;
+
 public class SmartAdapter implements IPlayerAdapter{
-    public SmartAdapter(int id) {
+    private Data data;
+
+    public SmartAdapter(Hand hand) {
+        data = new Data();
+        data.setHand(hand);
     }
 
     @Override
-    public void move() {
-
+    public Card move() {
+        return null;
     }
 
     @Override
