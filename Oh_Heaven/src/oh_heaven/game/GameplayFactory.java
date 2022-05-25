@@ -3,6 +3,7 @@ package oh_heaven.game;
 import ch.aplu.jcardgame.Hand;
 
 public class GameplayFactory {
+    private static GameplayFactory instance;
     private IPlayerAdapter playerAdaptor = null;
 
     // Retrieve character adapter based on the string
@@ -18,5 +19,13 @@ public class GameplayFactory {
         }
 
         return playerAdaptor;
+    }
+
+    // static method for accessing GameplayFactory only through this function
+    public static synchronized GameplayFactory getInstance() {
+        if (instance == null) {
+            instance = new GameplayFactory();
+        }
+        return instance;
     }
 }

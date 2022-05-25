@@ -169,7 +169,7 @@ private void initPlayers() {
 	players = new ArrayList<>();
 	for (int i = 0; i < nbPlayers; i++) {
 		// hands[i] = new Hand(deck);
-		players.add(gameplayFactory.getPlayerAdaptor(playerTypes.get(i), new Hand(deck)));
+		players.add(gameplayFactory.getInstance().getPlayerAdaptor(playerTypes.get(i), new Hand(deck)));
 		// players.get(i).info().setHand(new Hand(deck));
 	}
 }
@@ -239,7 +239,12 @@ private void playRound() {
 			selected = players.get(nextPlayer).move();
 			setStatus("Player " + nextPlayer + " double-click on card to follow.");
 			while (null == (selected = players.get(nextPlayer).move())) delay(100);
-		} else {
+		} else if (players.get(nextPlayer) instanceof RandomAdapter) {
+			setStatusText("Player " + nextPlayer + " thinking...");
+			delay(thinkingTime);
+			selected = players.get(nextPlayer).move();
+		}
+		else {
 			setStatusText("Player " + nextPlayer + " thinking...");
 			delay(thinkingTime);
 			// selected = randomCard(hands[nextPlayer]);
@@ -265,12 +270,17 @@ private void playRound() {
 				selected = players.get(nextPlayer).move();
 	    		setStatus("Player " + nextPlayer + " double-click on card to follow.");
 	    		while (null == (selected = players.get(nextPlayer).move())) delay(100);
-	        } else {
-		        setStatusText("Player " + nextPlayer + " thinking...");
-		        delay(thinkingTime);
-		        // selected = randomCard(hands[nextPlayer]);
+			} else if (players.get(nextPlayer) instanceof RandomAdapter) {
+				setStatusText("Player " + nextPlayer + " thinking...");
+				delay(thinkingTime);
+				selected = players.get(nextPlayer).move();
+			}
+			else {
+				setStatusText("Player " + nextPlayer + " thinking...");
+				delay(thinkingTime);
+				// selected = randomCard(hands[nextPlayer]);
 				selected = randomCard(players.get(nextPlayer).info().getHand());
-	        }
+			}
 	        // Follow with selected card
 		        trick.setView(this, new RowLayout(trickLocation, (trick.getNumberOfCards()+2)*trickWidth));
 				trick.draw();
@@ -363,6 +373,7 @@ private void playRound() {
 	  nbRounds = PropertiesLoader.loadRounds(properties);
 	  enforceRules = PropertiesLoader.loadEnforceRules(properties);
 	  playerTypes = PropertiesLoader.loadPlayers(properties);
+
 
 	  random = new Random(seed);
 
