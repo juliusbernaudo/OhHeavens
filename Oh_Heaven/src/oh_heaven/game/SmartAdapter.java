@@ -8,4 +8,9 @@ public class SmartAdapter implements IPlayerAdapter{
     public void move() {
 
     }
+
+    @Override
+    public Data info() {
+        return null;
+    }
 }

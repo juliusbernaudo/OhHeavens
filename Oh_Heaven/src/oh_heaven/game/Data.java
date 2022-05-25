@@ -2,6 +2,7 @@ package oh_heaven.game;
 
 import ch.aplu.jcardgame.CardGame;
 import ch.aplu.jcardgame.Hand;
+import ch.aplu.jcardgame.RowLayout;
 import ch.aplu.jgamegrid.Actor;
 
 public class Data extends CardGame {
@@ -10,17 +11,17 @@ public class Data extends CardGame {
     private int trick;
     private int bid;
     private Actor scoreActor;
+    private RowLayout layout;
     private boolean enforceRules = false;
 
-    public Data(Hand[] hands){
-        this.hand = hand;
+    public Data() {
     }
 
     public Hand getHand() {
         return hand;
     }
 
-    public void setHand(Hand[] hands) {
+    public void setHand(Hand hand) {
         this.hand = hand;
     }
 
@@ -46,6 +47,22 @@ public class Data extends CardGame {
 
     public void setBid(int bid) {
         this.bid = bid;
+    }
+
+    public Actor getScoreActor() {
+        return scoreActor;
+    }
+
+    public void setScoreActor(Actor scoreActor) {
+        this.scoreActor = scoreActor;
+    }
+
+    public RowLayout getLayout() {
+        return layout;
+    }
+
+    public void setLayout(RowLayout layout) {
+        this.layout = layout;
     }
 
     public boolean isEnforceRules() {

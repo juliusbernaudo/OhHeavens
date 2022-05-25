@@ -9,4 +9,9 @@ public class HumanAdapter implements IPlayerAdapter{
     public void move() {
 
     }
+
+    @Override
+    public Data info() {
+        return null;
+    }
 }
