@@ -17,7 +17,13 @@ public class RandomAdapter implements IPlayerAdapter{
 
     @Override
     public Card move() {
-        return RandomPlayer.randomCard(hand);
+        // choose a card randomly from hand
+        if (!hand.isEmpty()) {
+            return randomPlayer.randomCard(hand);
+        }
+        else {
+            return null;
+        }
     }
 
     @Override

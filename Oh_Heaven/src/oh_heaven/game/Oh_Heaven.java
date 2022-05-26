@@ -70,7 +70,7 @@ public class Oh_Heaven extends CardGame {
 	 
   private final String version = "1.0";
   public final int nbPlayers = 4;
-  public static int nbStartCards = 13;
+  public static int nbStartCards = 2;
   public static int nbRounds = 3;
   public final int madeBidBonus = 10;
   private final int handWidth = 400;
@@ -226,6 +226,13 @@ private void playRound() {
 	Suit lead;
 	int nextPlayer = random.nextInt(nbPlayers); // randomly select player to lead for this round
 	initBids(trumps, nextPlayer);
+
+	//adds to players stats
+	for (int i = 0; i < nbPlayers; i++) {
+		players.get(i).info().setTrump(trumps);
+		players.get(i).info().setLeader(nextPlayer);
+		players.get(i).info().setPlayerNum(i);
+	}
     // initScore();
     for (int i = 0; i < nbPlayers; i++) updateScore(i);
 	for (int i = 0; i < nbStartCards; i++) {
@@ -240,7 +247,12 @@ private void playRound() {
 			setStatus("Player " + nextPlayer + " double-click on card to follow.");
 			while (null == (selected = players.get(nextPlayer).move())) delay(100);
 		} else if (players.get(nextPlayer) instanceof RandomAdapter) {
-			setStatusText("Player " + nextPlayer + " thinking...");
+			setStatusText("Random Player " + nextPlayer + " thinking...");
+			delay(thinkingTime);
+			selected = players.get(nextPlayer).move();
+		}
+		else if (players.get(nextPlayer) instanceof LegalAdapter) {
+			setStatusText("Legal Player " + nextPlayer + " thinking...");
 			delay(thinkingTime);
 			selected = players.get(nextPlayer).move();
 		}
@@ -259,6 +271,12 @@ private void playRound() {
 		selected.transfer(trick, true); // transfer to trick (includes graphic effect)
 		winner = nextPlayer;
 		winningCard = selected;
+
+		// adds to players stats
+		for (int k = 0; k < nbPlayers; k++) {
+			players.get(k).info().setLeadSuit(lead);
+		}
+
 		// End Lead
 		for (int j = 1; j < nbPlayers; j++) {
 			if (++nextPlayer >= nbPlayers) nextPlayer = 0;  // From last back to first
@@ -271,7 +289,12 @@ private void playRound() {
 	    		setStatus("Player " + nextPlayer + " double-click on card to follow.");
 	    		while (null == (selected = players.get(nextPlayer).move())) delay(100);
 			} else if (players.get(nextPlayer) instanceof RandomAdapter) {
-				setStatusText("Player " + nextPlayer + " thinking...");
+				setStatusText("Random Player " + nextPlayer + " thinking...");
+				delay(thinkingTime);
+				selected = players.get(nextPlayer).move();
+			}
+			else if (players.get(nextPlayer) instanceof LegalAdapter) {
+				setStatusText("Legal Player " + nextPlayer + " thinking...");
 				delay(thinkingTime);
 				selected = players.get(nextPlayer).move();
 			}

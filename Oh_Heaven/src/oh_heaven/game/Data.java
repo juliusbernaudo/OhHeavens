@@ -12,9 +12,31 @@ public class Data extends CardGame {
     private int bid;
     private Actor scoreActor = new Actor();
     private RowLayout layout;
+    private int leader;
+    private Oh_Heaven.Suit trump;
+    private Oh_Heaven.Suit leadSuit;
+    private int playerNum;
 
     public Data() {
     }
+
+    public Oh_Heaven.Suit getLeadSuit() {return leadSuit;}
+
+    public void setLeadSuit(Oh_Heaven.Suit leadSuit) {this.leadSuit = leadSuit;}
+
+    public int getPlayerNum() {return playerNum;}
+
+    public void setPlayerNum(int playerNum) {this.playerNum = playerNum;}
+
+    public void setLeader(int leader) {this.leader = leader;}
+
+    public int getLeader() {return leader;}
+
+    public Oh_Heaven.Suit getTrump() {return trump;}
+
+    public void setTrump(Oh_Heaven.Suit trump) {this.trump = trump;}
+
+    public int getNumberOfCards() { return hand.getNumberOfCards();}
 
     public Hand getHand() {
         return hand;
