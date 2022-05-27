@@ -12,19 +12,19 @@ import java.util.stream.Collectors;
 @SuppressWarnings("serial")
 public class Oh_Heaven extends CardGame {
 	
-  public enum Suit
-  {
-    SPADES, HEARTS, DIAMONDS, CLUBS
-  }
+	public enum Suit
+	{
+		SPADES, HEARTS, DIAMONDS, CLUBS
+	}
 
-  public enum Rank
-  {
-    // Reverse order of rank importance (see rankGreater() below)
-	// Order of cards is tied to card images
-	ACE, KING, QUEEN, JACK, TEN, NINE, EIGHT, SEVEN, SIX, FIVE, FOUR, THREE, TWO
-  }
+	public enum Rank
+	{
+		// Reverse order of rank importance (see rankGreater() below)
+		// Order of cards is tied to card images
+		ACE, KING, QUEEN, JACK, TEN, NINE, EIGHT, SEVEN, SIX, FIVE, FOUR, THREE, TWO
+	}
   
-  final String trumpImage[] = {"bigspade.gif","bigheart.gif","bigdiamond.gif","bigclub.gif"};
+  final String trumpImage[] = {"bigspade.gif", "bigheart.gif", "bigdiamond.gif", "bigclub.gif"};
 
   static public int seed = 30006;
   static Random random;
@@ -68,39 +68,41 @@ public class Oh_Heaven extends CardGame {
 	  return card1.getRankId() < card2.getRankId(); // Warning: Reverse rank order of cards (see comment on enum)
   }
 	 
-  private final String version = "1.0";
-  public final int nbPlayers = 4;
-  public static int nbStartCards = 2;
-  public static int nbRounds = 3;
-  public final int madeBidBonus = 10;
-  private final int handWidth = 400;
-  private final int trickWidth = 40;
-  private final Deck deck = new Deck(Suit.values(), Rank.values(), "cover");
-  private final Location[] handLocations = {
-			  new Location(350, 625),
-			  new Location(75, 350),
-			  new Location(350, 75),
-			  new Location(625, 350)
-	  };
-  private final Location[] scoreLocations = {
-			  new Location(575, 675),
-			  new Location(25, 575),
-			  new Location(575, 25),
-			  // new Location(650, 575)
-			  new Location(575, 575)
-	  };
-  // private Actor[] scoreActors = {null, null, null, null };
-  private final Location trickLocation = new Location(350, 350);
-  private final Location textLocation = new Location(350, 450);
-  private final int thinkingTime = 2000;
-  // private Hand[] hands;
-  private GameplayFactory gameplayFactory = new GameplayFactory();
-  private ArrayList<IPlayerAdapter> players;
-  private Location hideLocation = new Location(-500, - 500);
-  private Location trumpsActorLocation = new Location(50, 50);
-  private static boolean enforceRules=false;
+private final String version = "1.0";
+public final int nbPlayers = 4;
+public static int nbStartCards = 2;
+public static int nbRounds = 3;
+public final int madeBidBonus = 10;
+private final int handWidth = 400;
+private final int trickWidth = 40;
+private final Deck deck = new Deck(Suit.values(), Rank.values(), "cover");
+private final Location[] handLocations = {
+	new Location(350, 625),
+	new Location(75, 350),
+	new Location(350, 75),
+	new Location(625, 350)
+};
 
-  public void setStatus(String string) { setStatusText(string); }
+private final Location[] scoreLocations = {
+	new Location(575, 675),
+	new Location(25, 575),
+	new Location(575, 25),
+	// new Location(650, 575)
+	new Location(575, 575)
+};
+
+// private Actor[] scoreActors = {null, null, null, null };
+private final Location trickLocation = new Location(350, 350);
+private final Location textLocation = new Location(350, 450);
+private final int thinkingTime = 2000;
+// private Hand[] hands;
+private GameplayFactory gameplayFactory = new GameplayFactory();
+private ArrayList<IPlayerAdapter> players;
+private Location hideLocation = new Location(-500, - 500);
+private Location trumpsActorLocation = new Location(50, 50);
+private static boolean enforceRules=false;
+
+public void setStatus(String string) { setStatusText(string); }
   
 // private int[] scores = new int[nbPlayers];
 // private int[] tricks = new int[nbPlayers];

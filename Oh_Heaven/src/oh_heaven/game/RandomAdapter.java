@@ -20,8 +20,7 @@ public class RandomAdapter implements IPlayerAdapter{
         // choose a card randomly from hand
         if (!hand.isEmpty()) {
             return randomPlayer.randomCard(hand);
-        }
-        else {
+        } else {
             return null;
         }
     }
