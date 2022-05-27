@@ -12,17 +12,7 @@ import java.util.stream.Collectors;
 @SuppressWarnings("serial")
 public class Oh_Heaven extends CardGame {
 	
-  public enum Suit
-  {
-    SPADES, HEARTS, DIAMONDS, CLUBS
-  }
 
-  public enum Rank
-  {
-    // Reverse order of rank importance (see rankGreater() below)
-	// Order of cards is tied to card images
-	ACE, KING, QUEEN, JACK, TEN, NINE, EIGHT, SEVEN, SIX, FIVE, FOUR, THREE, TWO
-  }
   
   final String trumpImage[] = {"bigspade.gif","bigheart.gif","bigdiamond.gif","bigclub.gif"};
 
@@ -75,7 +65,7 @@ public class Oh_Heaven extends CardGame {
   public final int madeBidBonus = 10;
   private final int handWidth = 400;
   private final int trickWidth = 40;
-  private final Deck deck = new Deck(Suit.values(), Rank.values(), "cover");
+  private final Deck deck = new Deck(CardType.Suit.values(), CardType.Rank.values(), "cover");
   private final Location[] handLocations = {
 			  new Location(350, 625),
 			  new Location(75, 350),
@@ -143,7 +133,7 @@ private void initTricks() {
 	 }
 }
 
-private void initBids(Suit trumps, int nextPlayer) {
+private void initBids(CardType.Suit trumps, int nextPlayer) {
 	int total = 0;
 	for (int i = nextPlayer; i < nextPlayer + nbPlayers; i++) {
 		int iP = i % nbPlayers;
@@ -216,14 +206,14 @@ private void initRound() {
 
 private void playRound() {
 	// Select and display trump suit
-	final Suit trumps = randomEnum(Suit.class);
+	final CardType.Suit trumps = randomEnum(CardType.Suit.class);
 	final Actor trumpsActor = new Actor("sprites/"+trumpImage[trumps.ordinal()]);
 	addActor(trumpsActor, trumpsActorLocation);
 	// End trump suit
 	Hand trick;
 	int winner;
 	Card winningCard;
-	Suit lead;
+	CardType.Suit lead;
 	int nextPlayer = random.nextInt(nbPlayers); // randomly select player to lead for this round
 	initBids(trumps, nextPlayer);
 
@@ -268,7 +258,7 @@ private void playRound() {
 		trick.draw();
 		selected.setVerso(false);
 		// No restrictions on the card being lead
-		lead = (Suit) selected.getSuit();
+		lead = (CardType.Suit) selected.getSuit();
 		selected.transfer(trick, true); // transfer to trick (includes graphic effect)
 		winner = nextPlayer;
 		winningCard = selected;

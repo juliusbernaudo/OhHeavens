@@ -13,16 +13,16 @@ public class Data extends CardGame {
     private Actor scoreActor = new Actor();
     private RowLayout layout;
     private int leader;
-    private Oh_Heaven.Suit trump;
-    private Oh_Heaven.Suit leadSuit;
+    private CardType.Suit trump;
+    private CardType.Suit leadSuit;
     private int playerNum;
 
     public Data() {
     }
 
-    public Oh_Heaven.Suit getLeadSuit() {return leadSuit;}
+    public CardType.Suit getLeadSuit() {return leadSuit;}
 
-    public void setLeadSuit(Oh_Heaven.Suit leadSuit) {this.leadSuit = leadSuit;}
+    public void setLeadSuit(CardType.Suit leadSuit) {this.leadSuit = leadSuit;}
 
     public int getPlayerNum() {return playerNum;}
 
@@ -32,9 +32,9 @@ public class Data extends CardGame {
 
     public int getLeader() {return leader;}
 
-    public Oh_Heaven.Suit getTrump() {return trump;}
+    public CardType.Suit getTrump() {return trump;}
 
-    public void setTrump(Oh_Heaven.Suit trump) {this.trump = trump;}
+    public void setTrump(CardType.Suit trump) {this.trump = trump;}
 
     public int getNumberOfCards() { return hand.getNumberOfCards();}
 
