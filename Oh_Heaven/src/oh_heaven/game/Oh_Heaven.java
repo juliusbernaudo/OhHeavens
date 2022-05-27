@@ -12,17 +12,7 @@ import java.util.stream.Collectors;
 @SuppressWarnings("serial")
 public class Oh_Heaven extends CardGame {
 	
-  public enum Suit
-  {
-    SPADES, HEARTS, DIAMONDS, CLUBS
-  }
 
-  public enum Rank
-  {
-    // Reverse order of rank importance (see rankGreater() below)
-	// Order of cards is tied to card images
-	ACE, KING, QUEEN, JACK, TEN, NINE, EIGHT, SEVEN, SIX, FIVE, FOUR, THREE, TWO
-  }
   
   final String trumpImage[] = {"bigspade.gif","bigheart.gif","bigdiamond.gif","bigclub.gif"};
 
@@ -75,7 +65,7 @@ public class Oh_Heaven extends CardGame {
   public final int madeBidBonus = 10;
   private final int handWidth = 400;
   private final int trickWidth = 40;
-  private final Deck deck = new Deck(Suit.values(), Rank.values(), "cover");
+  private final Deck deck = new Deck(CardType.Suit.values(), CardType.Rank.values(), "cover");
   private final Location[] handLocations = {
 			  new Location(350, 625),
 			  new Location(75, 350),
@@ -89,11 +79,9 @@ public class Oh_Heaven extends CardGame {
 			  // new Location(650, 575)
 			  new Location(575, 575)
 	  };
-  // private Actor[] scoreActors = {null, null, null, null };
   private final Location trickLocation = new Location(350, 350);
   private final Location textLocation = new Location(350, 450);
   private final int thinkingTime = 2000;
-  // private Hand[] hands;
   private GameplayFactory gameplayFactory = new GameplayFactory();
   private ArrayList<IPlayerAdapter> players;
   private Location hideLocation = new Location(-500, - 500);
@@ -101,10 +89,7 @@ public class Oh_Heaven extends CardGame {
   private static boolean enforceRules=false;
 
   public void setStatus(String string) { setStatusText(string); }
-  
-// private int[] scores = new int[nbPlayers];
-// private int[] tricks = new int[nbPlayers];
-// private int[] bids = new int[nbPlayers];
+
 
 Font bigFont = new Font("Serif", Font.BOLD, 36);
 
@@ -120,7 +105,6 @@ private void initScore() {
 private void updateScore(int player) {
 	removeActor(players.get(player).info().getScoreActor());
 	String text = "[" + String.valueOf(players.get(player).info().getScore()) + "]" + String.valueOf(players.get(player).info().getTrick()) + "/" + String.valueOf(players.get(player).info().getBid());
-	// scoreActors[player] = new TextActor(text, Color.WHITE, bgColor, bigFont);
 	players.get(player).info().setScoreActor(new TextActor(text, Color.WHITE, bgColor, bigFont));
 	addActor(players.get(player).info().getScoreActor(), scoreLocations[player]);
 }
@@ -143,7 +127,7 @@ private void initTricks() {
 	 }
 }
 
-private void initBids(Suit trumps, int nextPlayer) {
+private void initBids(CardType.Suit trumps, int nextPlayer) {
 	int total = 0;
 	for (int i = nextPlayer; i < nextPlayer + nbPlayers; i++) {
 		int iP = i % nbPlayers;
@@ -168,45 +152,25 @@ private Card selected;
 private void initPlayers() {
 	players = new ArrayList<>();
 	for (int i = 0; i < nbPlayers; i++) {
-		// hands[i] = new Hand(deck);
 		players.add(gameplayFactory.getInstance().getPlayerAdaptor(playerTypes.get(i), new Hand(deck)));
-		// players.get(i).info().setHand(new Hand(deck));
 	}
 }
 
 private void initRound() {
-//	hands = new Hand[nbPlayers];
-//	for (int i = 0; i < nbPlayers; i++){
-//		   hands[i] = new Hand(deck);
-//	}
 
 	dealingOut(players, nbPlayers, nbStartCards);
 	 for (int i = 0; i < nbPlayers; i++) {
-		 // hands[i].sort(Hand.SortType.SUITPRIORITY, true);
 		 players.get(i).info().getHand().sort(Hand.SortType.SUITPRIORITY, true);
 	 }
-//	 // Set up human player for interaction
-//	CardListener cardListener = new CardAdapter()  // Human Player plays card
-//	{
-//		public void leftDoubleClicked(Card card) { selected = card; players.get(0).info().getHand().setTouchEnabled(false); }
-//	};
-//	// hands[0].addCardListener(cardListener);
-//	players.get(0).info().getHand().addCardListener(cardListener);
 
-	// graphics
-	// RowLayout[] layouts = new RowLayout[nbPlayers];
+	 // Set up human player for interaction
 	for (int i = 0; i < nbPlayers; i++) {
-		//layouts[i] = new RowLayout(handLocations[i], handWidth);
 		players.get(i).info().setLayout(new RowLayout(handLocations[i], handWidth));
-		//layouts[i].setRotationAngle(90 * i);
 		players.get(i).info().getLayout().setRotationAngle(90 * i);
 		// layouts[i].setStepDelay(10);
-		// hands[i].setView(this, layouts[i]);
 		players.get(i).info().getHand().setView(this, players.get(i).info().getLayout());
 
-		// hands[i].setTargetArea(new TargetArea(trickLocation));
 		players.get(i).info().getHand().setTargetArea(new TargetArea(trickLocation));
-		// hands[i].draw();
 		players.get(i).info().getHand().draw();
 	}
 //	for (int i = 1; i < nbPlayers; i++) // This code can be used to visually hide the cards in a hand (make them face down)
@@ -216,14 +180,14 @@ private void initRound() {
 
 private void playRound() {
 	// Select and display trump suit
-	final Suit trumps = randomEnum(Suit.class);
+	final CardType.Suit trumps = randomEnum(CardType.Suit.class);
 	final Actor trumpsActor = new Actor("sprites/"+trumpImage[trumps.ordinal()]);
 	addActor(trumpsActor, trumpsActorLocation);
 	// End trump suit
 	Hand trick;
 	int winner;
 	Card winningCard;
-	Suit lead;
+	CardType.Suit lead;
 	int nextPlayer = random.nextInt(nbPlayers); // randomly select player to lead for this round
 	initBids(trumps, nextPlayer);
 
@@ -267,7 +231,7 @@ private void playRound() {
 		trick.draw();
 		selected.setVerso(false);
 		// No restrictions on the card being lead
-		lead = (Suit) selected.getSuit();
+		lead = (CardType.Suit) selected.getSuit();
 		selected.transfer(trick, true); // transfer to trick (includes graphic effect)
 		winner = nextPlayer;
 		winningCard = selected;
@@ -351,12 +315,6 @@ private void playRound() {
 		setStatusText("Player " + nextPlayer + " wins trick.");
 		players.get(nextPlayer).info().addTrick(1);
 		updateScore(nextPlayer);
-
-		/*for (int k = 0; k < nbPlayers; k++) {
-			if (players.get(k) instanceof SmartAdapter) {
-				System.out.println(k + " : " + players.get(k).info().getCurrentlyPlayed());
-			}
-		}*/
 	}
 	removeActor(trumpsActor);
 }

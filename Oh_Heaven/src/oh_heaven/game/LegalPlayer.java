@@ -23,9 +23,7 @@ public class LegalPlayer {
     // if not, look if there is a card with suit matching lead card suit
     // if not then pick random from hand
     public static Card legalCard(Hand hand, Data data) {
-        ArrayList<Card> trumpSuitsInHand;
         ArrayList<Card> leadSuitsInHand;
-        trumpSuitsInHand = hand.getCardsWithSuit(data.getTrump());
         leadSuitsInHand = hand.getCardsWithSuit(data.getLeadSuit());
 
         if (hand.getNumberOfCardsWithSuit(data.getLeadSuit()) > 0) {

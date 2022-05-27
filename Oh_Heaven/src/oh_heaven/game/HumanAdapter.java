@@ -34,7 +34,4 @@ public class HumanAdapter implements IPlayerAdapter{
         this.selected = selected;
     }
 
-    public Card getSelected() {
-        return selected;
-    }
 }
