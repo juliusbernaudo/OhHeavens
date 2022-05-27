@@ -31,9 +31,6 @@ public class LegalPlayer {
         if (hand.getNumberOfCardsWithSuit(data.getLeadSuit()) > 0) {
             return randomCard(leadSuitsInHand);
         }
-        else if (!trumpSuitsInHand.isEmpty()) {
-            return randomCard(trumpSuitsInHand);
-        }
         else {
             return randomCard(hand);
         }

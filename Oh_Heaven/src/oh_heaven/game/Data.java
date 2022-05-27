@@ -1,5 +1,6 @@
 package oh_heaven.game;
 
+import ch.aplu.jcardgame.Card;
 import ch.aplu.jcardgame.CardGame;
 import ch.aplu.jcardgame.Hand;
 import ch.aplu.jcardgame.RowLayout;
@@ -16,9 +17,19 @@ public class Data extends CardGame {
     private Oh_Heaven.Suit trump;
     private Oh_Heaven.Suit leadSuit;
     private int playerNum;
+    //private Hand currentlyPlayed;
+    private Card currentWinningCard;
 
     public Data() {
     }
+
+    public Card getCurrentWinningCard() {return currentWinningCard;}
+
+    public void setCurrentWinningCard(Card currentWinningCard) {this.currentWinningCard = currentWinningCard;}
+
+   // public Hand getCurrentlyPlayed() {return currentlyPlayed;}
+
+    //public void addToCurrentlyPlayed(Card card) {this.currentlyPlayed.insert(card, false);}
 
     public Oh_Heaven.Suit getLeadSuit() {return leadSuit;}
 

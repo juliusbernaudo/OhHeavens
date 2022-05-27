@@ -257,11 +257,10 @@ private void playRound() {
 			delay(thinkingTime);
 			selected = players.get(nextPlayer).move();
 		}
-		else {
-			setStatusText("Player " + nextPlayer + " thinking...");
+		else if (players.get(nextPlayer) instanceof SmartAdapter) {
+			setStatusText("Smart Player " + nextPlayer + " thinking...");
 			delay(thinkingTime);
-			// selected = randomCard(hands[nextPlayer]);
-			selected = randomCard(players.get(nextPlayer).info().getHand());
+			selected = players.get(nextPlayer).move();
 		}
         // Lead with selected card
 		trick.setView(this, new RowLayout(trickLocation, (trick.getNumberOfCards()+2)*trickWidth));
@@ -280,6 +279,13 @@ private void playRound() {
 
 		// End Lead
 		for (int j = 1; j < nbPlayers; j++) {
+			// add played cards to smart players data
+			for (int k = 0; k < nbPlayers; k++) {
+				if (players.get(k) instanceof SmartAdapter) {
+					//players.get(k).info().addToCurrentlyPlayed(selected);
+					players.get(k).info().setCurrentWinningCard(winningCard);
+				}
+			}
 			if (++nextPlayer >= nbPlayers) nextPlayer = 0;  // From last back to first
 			selected = null;
 			// if (false) {
@@ -299,11 +305,10 @@ private void playRound() {
 				delay(thinkingTime);
 				selected = players.get(nextPlayer).move();
 			}
-			else {
-				setStatusText("Player " + nextPlayer + " thinking...");
+			else if (players.get(nextPlayer) instanceof SmartAdapter) {
+				setStatusText("Smart Player " + nextPlayer + " thinking...");
 				delay(thinkingTime);
-				// selected = randomCard(hands[nextPlayer]);
-				selected = randomCard(players.get(nextPlayer).info().getHand());
+				selected = players.get(nextPlayer).move();
 			}
 	        // Follow with selected card
 		        trick.setView(this, new RowLayout(trickLocation, (trick.getNumberOfCards()+2)*trickWidth));
@@ -346,6 +351,12 @@ private void playRound() {
 		setStatusText("Player " + nextPlayer + " wins trick.");
 		players.get(nextPlayer).info().addTrick(1);
 		updateScore(nextPlayer);
+
+		/*for (int k = 0; k < nbPlayers; k++) {
+			if (players.get(k) instanceof SmartAdapter) {
+				System.out.println(k + " : " + players.get(k).info().getCurrentlyPlayed());
+			}
+		}*/
 	}
 	removeActor(trumpsActor);
 }
@@ -363,7 +374,7 @@ private void playRound() {
 		initRound();
 		playRound();
 		updateScores();
-    };
+    }
     for (int i=0; i <nbPlayers; i++) updateScore(i);
     int maxScore = 0;
     for (int i = 0; i <nbPlayers; i++) if (players.get(i).info().getScore() > maxScore) maxScore = players.get(i).info().getScore();
