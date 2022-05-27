@@ -227,15 +227,16 @@ private void playRound() {
 	int nextPlayer = random.nextInt(nbPlayers); // randomly select player to lead for this round
 	initBids(trumps, nextPlayer);
 
-	//adds to players stats
-	for (int i = 0; i < nbPlayers; i++) {
-		players.get(i).info().setTrump(trumps);
-		players.get(i).info().setLeader(nextPlayer);
-		players.get(i).info().setPlayerNum(i);
-	}
+
     // initScore();
     for (int i = 0; i < nbPlayers; i++) updateScore(i);
 	for (int i = 0; i < nbStartCards; i++) {
+		//adds to players stats
+		for (int l = 0; l < nbPlayers; l++) {
+			players.get(l).info().setTrump(trumps);
+			players.get(l).info().setLeader(nextPlayer);
+			players.get(l).info().setPlayerNum(l);
+		}
 		trick = new Hand(deck);
     	selected = null;
     	// if (false) {

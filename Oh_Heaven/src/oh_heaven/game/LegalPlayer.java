@@ -28,11 +28,11 @@ public class LegalPlayer {
         trumpSuitsInHand = hand.getCardsWithSuit(data.getTrump());
         leadSuitsInHand = hand.getCardsWithSuit(data.getLeadSuit());
 
-        if (!trumpSuitsInHand.isEmpty()) {
-            return randomCard(trumpSuitsInHand);
-        }
-        else if (!leadSuitsInHand.isEmpty()) {
+        if (hand.getNumberOfCardsWithSuit(data.getLeadSuit()) > 0) {
             return randomCard(leadSuitsInHand);
+        }
+        else if (!trumpSuitsInHand.isEmpty()) {
+            return randomCard(trumpSuitsInHand);
         }
         else {
             return randomCard(hand);
