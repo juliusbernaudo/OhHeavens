@@ -79,11 +79,9 @@ public class Oh_Heaven extends CardGame {
 			  // new Location(650, 575)
 			  new Location(575, 575)
 	  };
-  // private Actor[] scoreActors = {null, null, null, null };
   private final Location trickLocation = new Location(350, 350);
   private final Location textLocation = new Location(350, 450);
   private final int thinkingTime = 2000;
-  // private Hand[] hands;
   private GameplayFactory gameplayFactory = new GameplayFactory();
   private ArrayList<IPlayerAdapter> players;
   private Location hideLocation = new Location(-500, - 500);
@@ -91,10 +89,7 @@ public class Oh_Heaven extends CardGame {
   private static boolean enforceRules=false;
 
   public void setStatus(String string) { setStatusText(string); }
-  
-// private int[] scores = new int[nbPlayers];
-// private int[] tricks = new int[nbPlayers];
-// private int[] bids = new int[nbPlayers];
+
 
 Font bigFont = new Font("Serif", Font.BOLD, 36);
 
@@ -110,7 +105,6 @@ private void initScore() {
 private void updateScore(int player) {
 	removeActor(players.get(player).info().getScoreActor());
 	String text = "[" + String.valueOf(players.get(player).info().getScore()) + "]" + String.valueOf(players.get(player).info().getTrick()) + "/" + String.valueOf(players.get(player).info().getBid());
-	// scoreActors[player] = new TextActor(text, Color.WHITE, bgColor, bigFont);
 	players.get(player).info().setScoreActor(new TextActor(text, Color.WHITE, bgColor, bigFont));
 	addActor(players.get(player).info().getScoreActor(), scoreLocations[player]);
 }
@@ -158,45 +152,25 @@ private Card selected;
 private void initPlayers() {
 	players = new ArrayList<>();
 	for (int i = 0; i < nbPlayers; i++) {
-		// hands[i] = new Hand(deck);
 		players.add(gameplayFactory.getInstance().getPlayerAdaptor(playerTypes.get(i), new Hand(deck)));
-		// players.get(i).info().setHand(new Hand(deck));
 	}
 }
 
 private void initRound() {
-//	hands = new Hand[nbPlayers];
-//	for (int i = 0; i < nbPlayers; i++){
-//		   hands[i] = new Hand(deck);
-//	}
 
 	dealingOut(players, nbPlayers, nbStartCards);
 	 for (int i = 0; i < nbPlayers; i++) {
-		 // hands[i].sort(Hand.SortType.SUITPRIORITY, true);
 		 players.get(i).info().getHand().sort(Hand.SortType.SUITPRIORITY, true);
 	 }
-//	 // Set up human player for interaction
-//	CardListener cardListener = new CardAdapter()  // Human Player plays card
-//	{
-//		public void leftDoubleClicked(Card card) { selected = card; players.get(0).info().getHand().setTouchEnabled(false); }
-//	};
-//	// hands[0].addCardListener(cardListener);
-//	players.get(0).info().getHand().addCardListener(cardListener);
 
-	// graphics
-	// RowLayout[] layouts = new RowLayout[nbPlayers];
+	 // Set up human player for interaction
 	for (int i = 0; i < nbPlayers; i++) {
-		//layouts[i] = new RowLayout(handLocations[i], handWidth);
 		players.get(i).info().setLayout(new RowLayout(handLocations[i], handWidth));
-		//layouts[i].setRotationAngle(90 * i);
 		players.get(i).info().getLayout().setRotationAngle(90 * i);
 		// layouts[i].setStepDelay(10);
-		// hands[i].setView(this, layouts[i]);
 		players.get(i).info().getHand().setView(this, players.get(i).info().getLayout());
 
-		// hands[i].setTargetArea(new TargetArea(trickLocation));
 		players.get(i).info().getHand().setTargetArea(new TargetArea(trickLocation));
-		// hands[i].draw();
 		players.get(i).info().getHand().draw();
 	}
 //	for (int i = 1; i < nbPlayers; i++) // This code can be used to visually hide the cards in a hand (make them face down)
@@ -247,11 +221,10 @@ private void playRound() {
 			delay(thinkingTime);
 			selected = players.get(nextPlayer).move();
 		}
-		else {
-			setStatusText("Player " + nextPlayer + " thinking...");
+		else if (players.get(nextPlayer) instanceof SmartAdapter) {
+			setStatusText("Smart Player " + nextPlayer + " thinking...");
 			delay(thinkingTime);
-			// selected = randomCard(hands[nextPlayer]);
-			selected = randomCard(players.get(nextPlayer).info().getHand());
+			selected = players.get(nextPlayer).move();
 		}
         // Lead with selected card
 		trick.setView(this, new RowLayout(trickLocation, (trick.getNumberOfCards()+2)*trickWidth));
@@ -270,6 +243,13 @@ private void playRound() {
 
 		// End Lead
 		for (int j = 1; j < nbPlayers; j++) {
+			// add played cards to smart players data
+			for (int k = 0; k < nbPlayers; k++) {
+				if (players.get(k) instanceof SmartAdapter) {
+					//players.get(k).info().addToCurrentlyPlayed(selected);
+					players.get(k).info().setCurrentWinningCard(winningCard);
+				}
+			}
 			if (++nextPlayer >= nbPlayers) nextPlayer = 0;  // From last back to first
 			selected = null;
 			// if (false) {
@@ -289,11 +269,10 @@ private void playRound() {
 				delay(thinkingTime);
 				selected = players.get(nextPlayer).move();
 			}
-			else {
-				setStatusText("Player " + nextPlayer + " thinking...");
+			else if (players.get(nextPlayer) instanceof SmartAdapter) {
+				setStatusText("Smart Player " + nextPlayer + " thinking...");
 				delay(thinkingTime);
-				// selected = randomCard(hands[nextPlayer]);
-				selected = randomCard(players.get(nextPlayer).info().getHand());
+				selected = players.get(nextPlayer).move();
 			}
 	        // Follow with selected card
 		        trick.setView(this, new RowLayout(trickLocation, (trick.getNumberOfCards()+2)*trickWidth));
@@ -353,7 +332,7 @@ private void playRound() {
 		initRound();
 		playRound();
 		updateScores();
-    };
+    }
     for (int i=0; i <nbPlayers; i++) updateScore(i);
     int maxScore = 0;
     for (int i = 0; i <nbPlayers; i++) if (players.get(i).info().getScore() > maxScore) maxScore = players.get(i).info().getScore();
